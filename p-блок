@@ -1,0 +1,27 @@
+def p_box(data):
+    p_permutation = [3, 0, 2, 1, 4, 7, 6, 5]
+
+    result = 0
+    for i, bit in enumerate(p_permutation):
+        result |= ((data >> i) & 0x01) << bit
+
+    return result
+def reverse_p_box(data):
+    p_permutation = [3, 0, 2, 1, 4, 7, 6, 5]
+
+    result = 0
+    for i, bit in enumerate(p_permutation):
+        result |= ((data >> bit) & 0x01) << i
+
+    return result
+def test_p_box():
+    test_data = [0x3C, 0x9A, 0x52, 0xE7]
+    for data in test_data:
+        p_result = p_box(data)
+        reverse_result = reverse_p_box(p_result)
+        assert data == reverse_result, f"Error: {data} != {reverse_result}"
+
+    print("працює")
+
+
+test_p_box()
