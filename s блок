@@ -1,0 +1,40 @@
+Constants = [
+    [9, 4, 10, 11, 13, 1, 8, 5, 6, 2, 0, 3, 12, 14, 15, 7],
+    [0, 15, 7, 4, 14, 2, 13, 1, 10, 6, 12, 11, 9, 5, 3, 8],
+    [4, 1, 14, 8, 13, 6, 2, 11, 15, 12, 9, 7, 3, 10, 5, 0],
+    [15, 12, 8, 2, 4, 9, 1, 7, 5, 11, 3, 14, 10, 0, 6, 13]
+]
+
+def compute_inverse_constants(constants):
+    inverse_constants = [[None] * 16 for _ in range(16)]
+    for i in range(len(constants)):
+        for j in range(len(constants[i])):
+            inverse_constants[constants[i][j]][j] = i
+    return inverse_constants
+
+def s_block_forward(input_data, constants):
+    output_data = []
+    for i in range(len(input_data)):
+        row = (input_data[i] >> 2) & 0x03
+        column = input_data[i] & 0x03
+        output_data.append(constants[row][column])
+    return output_data
+
+def s_block_inverse(input_data, inverse_constants):
+    output_data = []
+    for i in range(len(input_data)):
+        row = (input_data[i] >> 2) & 0x03
+        column = input_data[i] & 0x03
+        output_data.append(inverse_constants[row][column])
+    return output_data
+
+input_data = [0x9, 0x1, 0xE, 0x4] 
+encrypted_data = s_block_forward(input_data, Constants)  
+inverse_constants = compute_inverse_constants(Constants)  
+decrypted_data = s_block_inverse(encrypted_data, inverse_constants)
+print("Input data:", input_data)
+print("Encrypted data:", encrypted_data)
+print("Decrypted data:", decrypted_data)
+
+
+
